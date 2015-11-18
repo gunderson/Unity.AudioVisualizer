@@ -3,26 +3,25 @@ using System.Collections;
 
 public class AudioMediator : MonoBehaviour {
 
-	private int FFTSampleDepth = 32;
-	private int FFTBufferDepth = 32;
+	public int FFTSampleDepth = 256;
+	public int FFTBufferDepth = 32;
 
-	public float[][] FFTBufferBuffer;
+	public float[][] FFTBuffer;
 	public int CurrentBufferPosition = 0;
 	public AudioSource MainAudioSource;
 
 	// Use this for initialization
 	void Start () {
 		// load audio file
-		FFTBufferBuffer = AudioMediator.MakeFlatBufferBuffer(FFTBufferDepth, FFTSampleDepth);
+		FFTBuffer = AudioMediator.MakeFlatBuffer(FFTBufferDepth, FFTSampleDepth);
 		MainAudioSource = gameObject.GetComponent<AudioSource> ();
 		MainAudioSource.Play ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		float[] b = new float[32];
-//		MainAudioSource.GetSpectrumData (b, 1, FFTWindow.BlackmanHarris);
-//		CurrentBufferPosition = OffsetIndex (CurrentBufferPosition, 1, FFTBufferBuffer.Length);
+		MainAudioSource.GetSpectrumData (FFTBuffer[CurrentBufferPosition], 0, FFTWindow.BlackmanHarris);
+		CurrentBufferPosition = OffsetIndex (CurrentBufferPosition, 1, FFTBuffer.Length);
 	}
 	
 	// loops an incrementer so that 
@@ -32,7 +31,7 @@ public class AudioMediator : MonoBehaviour {
 		return newBufferPosition;
 	}
 
-	public static float[][] MakeFlatBufferBuffer(int w, int h){
+	public static float[][] MakeFlatBuffer(int w, int h){
 		float[][] output = new float[w][];
 		while(w > 0){
 			output[--w] = AudioMediator.MakeArray(h);

@@ -7,7 +7,9 @@ public class GridMediator : MonoBehaviour{
 	public Vector3 GridSize = new Vector3 (32, 32, 32);
 	public Vector3 OffsetRadius = new Vector3 (2f, 0.0f, 2f);
 	private Vector3 CellSize;
+	private List<MarkerMediator> ActiveMarkers = new List<MarkerMediator> ();
 	public GameObject MarkerPrefab;
+	private AudioMediator audioMediator;
 	
 	void Awake() {
 		MarkerPrefab = Resources.Load ("Marker") as GameObject;
@@ -16,12 +18,20 @@ public class GridMediator : MonoBehaviour{
 
 	// Use this for initialization
 	void Start (){
+		audioMediator = GameObject.Find ("AudioController").GetComponent<AudioMediator> ();
 		PopulateGrid ();
 	}
 	
 	// Update is called once per frame
 	void Update (){
-	
+		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
+			MarkerMediator m = ActiveMarkers[i];
+//			m.gameObject.transform.localRotation = new Vector3(0, m.GridPosition.x, 0);
+			int col = (Mathf.RoundToInt(m.GridPosition.x) + audioMediator.CurrentBufferPosition) % (audioMediator.FFTBufferDepth - 1);
+			int row = Mathf.RoundToInt(m.GridPosition.z * 8);
+			float scale = 512;//16 + 1024 * m.GridPosition.z / GridSize.z;
+			m.gameObject.transform.localScale = new Vector3(1, audioMediator.FFTBuffer[col][row] * scale, 1);
+		}
 	}
 
 	public void SetValues(float [][] FFTBuffer){
@@ -35,7 +45,6 @@ public class GridMediator : MonoBehaviour{
 		}
 	}
 	
-	private List<MarkerMediator> ActiveMarkers = new List<MarkerMediator> ();
 	
 	private void PopulateGrid(){
 		ActiveMarkers.AddRange (GetMarkers (Mathf.RoundToInt(CellCount.x * CellCount.y * CellCount.z)));
