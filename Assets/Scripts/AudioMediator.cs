@@ -15,13 +15,13 @@ public class AudioMediator : MonoBehaviour {
 		// load audio file
 		FFTBufferBuffer = AudioMediator.MakeFlatBufferBuffer(FFTBufferDepth, FFTSampleDepth);
 		MainAudioSource = gameObject.GetComponent<AudioSource> ();
-		MainAudioSource.Play ();
+//		MainAudioSource.Play ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		float[] b = new float[32];
-//		MainAudioSource.GetSpectrumData (b, 1, FFTWindow.BlackmanHarris);
+//		MainAudioSource.GetSpectrumData (b, 1, FFTWindow.Rectangular);
 //		CurrentBufferPosition = OffsetIndex (CurrentBufferPosition, 1, FFTBufferBuffer.Length);
 	}
 	
