@@ -27,7 +27,7 @@ public class GridMediator : MonoBehaviour{
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
 			MarkerMediator m = ActiveMarkers[i];
 //			m.gameObject.transform.localRotation = new Vector3(0, m.GridPosition.x, 0);
-			int col = (Mathf.RoundToInt(m.GridPosition.x) + audioMediator.CurrentBufferPosition) % (audioMediator.FFTBufferDepth - 1);
+			int col = Mathf.RoundToInt(m.GridPosition.x);//(Mathf.RoundToInt(m.GridPosition.x) + audioMediator.CurrentBufferPosition) % (audioMediator.FFTBufferDepth - 1);
 			int row = Mathf.RoundToInt(m.GridPosition.z * 8);
 			float scale = 512;//16 + 1024 * m.GridPosition.z / GridSize.z;
 			m.gameObject.transform.localScale = new Vector3(1, audioMediator.FFTBuffer[col][row] * scale, 1);
