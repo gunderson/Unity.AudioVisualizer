@@ -3,8 +3,8 @@ using System.Collections;
 
 public class AudioMediator : MonoBehaviour {
 
-	public int FFTSampleDepth = 256;
-	public int FFTBufferDepth = 32;
+	public int FFTSampleDepth = 2048;
+	public int FFTBufferDepth = 1;
 
 	public float[][] FFTBuffer;
 	public int CurrentBufferPosition = 0;
@@ -15,12 +15,12 @@ public class AudioMediator : MonoBehaviour {
 		// load audio file
 		FFTBuffer = AudioMediator.MakeFlatBuffer(FFTBufferDepth, FFTSampleDepth);
 		MainAudioSource = gameObject.GetComponent<AudioSource> ();
-//		MainAudioSource.Play ();
+		MainAudioSource.Play ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		MainAudioSource.GetSpectrumData (FFTBuffer[CurrentBufferPosition], 0, FFTWindow.BlackmanHarris);
+		MainAudioSource.GetSpectrumData (FFTBuffer[CurrentBufferPosition], 0, FFTWindow.Rectangular);
 		CurrentBufferPosition = OffsetIndex (CurrentBufferPosition, 1, FFTBuffer.Length);
 	}
 	
