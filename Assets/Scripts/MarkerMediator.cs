@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MarkerMediator : MonoBehaviour{
 
-	private float friction = 0.8f;
+	private float friction = 0.95f;
 
 	// Use this for initialization
 	void Start (){

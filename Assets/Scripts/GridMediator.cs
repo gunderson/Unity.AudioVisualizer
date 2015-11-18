@@ -29,7 +29,7 @@ public class GridMediator : MonoBehaviour{
 	void Update (){
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
 			MarkerMediator m = ActiveMarkers[i];
-			float scale = 2048;//16 + 1024 * m.GridPosition.z / GridSize.z;
+			float scale = 1 << 12;//16 + 1024 * m.GridPosition.z / GridSize.z;
 			m.displayValue = audioMediator.FFTBuffer[0][(numMarkers - 1) - i] * scale;
 
 		}
@@ -72,7 +72,7 @@ public class GridMediator : MonoBehaviour{
 			NewMarkers[i].Home = pos;
 
 			NewMarkers[i].gameObject.transform.position = NewMarkers[i].Home ;
-			NewMarkers[i].gameObject.transform.localScale = new Vector3(1,10,1);
+			NewMarkers[i].gameObject.transform.localScale = new Vector3(1,0,1);
 
 			Vector2 PositionRatio = new Vector2(NewMarkers[i].gameObject.transform.position.x / finalRadius, NewMarkers[i].gameObject.transform.position.z / finalRadius);
 
