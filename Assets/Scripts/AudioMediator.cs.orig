@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class AudioMediator : MonoBehaviour {
@@ -20,8 +20,14 @@ public class AudioMediator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+<<<<<<< HEAD
+		float[] b = new float[32];
+//		MainAudioSource.GetSpectrumData (b, 1, FFTWindow.Rectangular);
+//		CurrentBufferPosition = OffsetIndex (CurrentBufferPosition, 1, FFTBufferBuffer.Length);
+=======
 		MainAudioSource.GetSpectrumData (FFTBuffer[CurrentBufferPosition], 0, FFTWindow.BlackmanHarris);
 		CurrentBufferPosition = OffsetIndex (CurrentBufferPosition, 1, FFTBuffer.Length);
+>>>>>>> af535c302e53a3d6e6de39a63a32ada7927fce26
 	}
 	
 	// loops an incrementer so that 
