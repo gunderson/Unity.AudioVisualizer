@@ -3,10 +3,64 @@ using System.Collections;
 
 public class MarkerMediator : MonoBehaviour{
 
-	private float friction = 0.95f;
+	public float friction = 0.95f;
+	public float scaleRatio = 0;
 
+	public Vector3 scaleDest;
+
+	private GameObject Prism;
+
+	public enum Mode {
+		Stream,
+		Grid,
+		Wash,
+	};
+
+	private float _colormapRatio = 0;
+	public float colormapRatio{
+		get{
+			return _colormapRatio;
+		}
+		set{
+			_colormapRatio = value;
+		}
+	}
+
+	private float _positionRatio = 0;
+	public float positionRatio{
+		get{
+			return _positionRatio;
+		}
+		set{
+			_positionRatio = value;
+		}
+	}
+	
+	private Vector3 _positionStart = new Vector3();
+	private Vector3 _positionDest = new Vector3();
+	public Vector3 positionDest{
+		get{
+			return _positionDest;
+		}
+		set{
+			_positionDest = value;
+		}
+	}
+
+	private Vector3 _rotationStart = new Vector3();
+	private Vector3 _rotationDest = new Vector3();
+	public Vector3 rotationDest{
+		get{
+			return _rotationDest;
+		}
+		set{
+			_rotationDest = value;
+		}
+	}
+	
 	// Use this for initialization
 	void Start (){
+		Prism = gameObject.transform.Find("Prism").gameObject;
 	}
 	
 	// Update is called once per frame
