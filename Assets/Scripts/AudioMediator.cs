@@ -20,7 +20,7 @@ public class AudioMediator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		MainAudioSource.GetSpectrumData (FFTBuffer[CurrentBufferPosition], 0, FFTWindow.Rectangular);
+		MainAudioSource.GetSpectrumData (FFTBuffer[CurrentBufferPosition], 0, FFTWindow.BlackmanHarris);
 		CurrentBufferPosition = OffsetIndex (CurrentBufferPosition, 1, FFTBuffer.Length);
 	}
 	

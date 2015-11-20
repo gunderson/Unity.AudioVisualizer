@@ -29,7 +29,7 @@ public class GridMediator : MonoBehaviour{
 	void Update (){
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
 			MarkerMediator m = ActiveMarkers[i];
-			float scale = 1 << 12;//16 + 1024 * m.GridPosition.z / GridSize.z;
+			float scale = 1 << 13;//16 + 1024 * m.GridPosition.z / GridSize.z;
 			m.displayValue = audioMediator.FFTBuffer[0][(numMarkers - 1) - i] * scale;
 
 		}
@@ -60,6 +60,8 @@ public class GridMediator : MonoBehaviour{
 
 		float finalRadius = Mathf.Sqrt (numMarkers + spiralStartIndex);
 
+		Vector3 origin = new Vector3 (0, 0, 0);
+
 		for (int i = 0; i < count; i++){
 			NewMarkers[i] = MakeMarker();
 			NewMarkers[i].index = i;
@@ -73,10 +75,13 @@ public class GridMediator : MonoBehaviour{
 
 			NewMarkers[i].gameObject.transform.position = NewMarkers[i].Home ;
 			NewMarkers[i].gameObject.transform.localScale = new Vector3(1,0,1);
+			NewMarkers[i].gameObject.transform.LookAt(origin);
+			
 
 			Vector2 PositionRatio = new Vector2(NewMarkers[i].gameObject.transform.position.x / finalRadius, NewMarkers[i].gameObject.transform.position.z / finalRadius);
 
 			Transform prism = NewMarkers[i].gameObject.transform.Find("Prism");
+
 			Renderer r = prism.GetComponent<Renderer>();
 			Material m = r.material;
 			m.SetVector("_Position", new Vector4(PositionRatio.x, PositionRatio.y));
