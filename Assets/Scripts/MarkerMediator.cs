@@ -9,6 +9,7 @@ public class MarkerMediator : MonoBehaviour{
 	public Vector3 scaleDest;
 
 	private GameObject Prism;
+	private Material PrismMaterial;
 
 	public bool DisplayvalueAffectsScaleX = false;
 	public bool DisplayvalueAffectsScaleY = true;
@@ -18,9 +19,29 @@ public class MarkerMediator : MonoBehaviour{
 	// ----------------------------------------
 	// Color Transitions
 
-	/// <summary>
-	/// The _prev colormap ratio.
-	/// </summary>
+	private float _prevAlphaRatio = 0;
+	private float _alphaRatio = 0;
+	public float alphaRatio{
+		get{
+			return _alphaRatio;
+		}
+		set{
+			_prevAlphaRatio = _alphaRatio;
+			_alphaRatio = value;
+		}
+	}
+
+	private float _prevAlpha = 0;
+	private float _alpha = 0;
+	public float alpha{
+		get{
+			return _alpha;
+		}
+		set{
+			_prevAlpha = _alpha;
+			_alpha = value;
+		}
+	}
 
 	private float _prevColormapRatio = 0;
 	private float _colormapRatio = 0;
@@ -124,6 +145,7 @@ public class MarkerMediator : MonoBehaviour{
 	// Use this for initialization
 	void Start (){
 		Prism = gameObject.transform.Find("Prism").gameObject;
+		PrismMaterial = Prism.GetComponent<Renderer> ().material;
 	}
 	
 	// Update is called once per frame
@@ -132,6 +154,14 @@ public class MarkerMediator : MonoBehaviour{
 		// update rotation
 		// update colormap position
 		// update colormap mix
+		// update alpha mix
+		if (_alpha != _prevAlpha && _alphaRatio != 0 && _alphaRatio != 1) {
+			PrismMaterial.SetFloat ("_alpha", Mathf.Lerp (_prevAlpha, _alpha, _alphaRatio));
+		} else if (_alphaRatio == 0) {
+			PrismMaterial.SetFloat ("_alpha", _prevAlpha);
+		} else if (_alphaRatio == 1) {
+			PrismMaterial.SetFloat ("_alpha", _alpha);
+		}
 
 		Vector3 newScale = new Vector3 ();
 		newScale.x = DisplayvalueAffectsScaleX ? gameObject.transform.localScale.x * friction : 1;
