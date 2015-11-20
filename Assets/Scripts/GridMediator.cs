@@ -20,6 +20,9 @@ public class GridMediator : MonoBehaviour{
 	public float positionRatio = 0;
 	public float colormapRatio = 0;
 
+	private float _transitionStartTime = 0;
+	public float transitionDuration = 0;
+
 
 	public Vector3 markerLookTarget = new Vector3();
 
@@ -102,13 +105,14 @@ public class GridMediator : MonoBehaviour{
 	public void MoveMarkersToSpiral(){
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
 			MarkerMediator m = ActiveMarkers[i];
-			float scale = 1 << 13;//16 + 1024 * m.GridPosition.z / GridSize.z;
-			m.displayValue = audioMediator.FFTBuffer[0][(numMarkers - 1) - i] * scale;
+
 		}
 	}
 
 	public void MoveMarkersToCone(){
-		
+		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
+			MarkerMediator m = ActiveMarkers[i];
+		}
 	}
 
 	public void MoveMarkersToGrid(){
@@ -140,6 +144,24 @@ public class GridMediator : MonoBehaviour{
 		
 	}
 
+	public List<MarkerMediator> changeColormap(List<MarkerMediator> Markers, Texture2D colormap){
+		for (int i = 0, endi = Markers.Count; i<endi; i++) {
+			MarkerMediator m = Markers[i];
+			// set colormap1 to colormap0
+			// set colormap1 to colormap
+			// set colormapRatio = 0;
+		}
+		return Markers;
+	}
+
+	public List<MarkerMediator> setColormapRatio(List<MarkerMediator> Markers, float ratio){
+		for (int i = 0, endi = Markers.Count; i<endi; i++) {
+			MarkerMediator m = Markers[i];
+			// set colormapRatio = ratio;
+		}
+		return Markers;
+	}
+	
 	private List<MarkerMediator> setupSpiral(List<MarkerMediator> Markers){
 
 		float finalRadius = Mathf.Sqrt (numMarkers + spiralStartIndex);
