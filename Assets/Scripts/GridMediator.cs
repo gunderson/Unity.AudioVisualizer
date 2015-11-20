@@ -23,6 +23,9 @@ public class GridMediator : MonoBehaviour{
 	private float _transitionStartTime = 0;
 	public float transitionDuration = 0;
 
+	private float _prevAlpha = 0;
+	public float Alpha = 0;
+
 
 	public Vector3 markerLookTarget = new Vector3();
 
@@ -99,6 +102,10 @@ public class GridMediator : MonoBehaviour{
 			MarkerMediator m = ActiveMarkers[i];
 			m.positionRatio = positionRatio;
 			m.colormapRatio = colormapRatio;
+			if (_prevAlpha != Alpha){
+				m.alpha = Alpha;
+				_prevAlpha = Alpha;
+			}
 		}
 	}
 	

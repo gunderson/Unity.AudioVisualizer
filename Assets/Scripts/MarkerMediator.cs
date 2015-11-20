@@ -19,20 +19,20 @@ public class MarkerMediator : MonoBehaviour{
 	// ----------------------------------------
 	// Color Transitions
 
-	private float _prevAlphaRatio = 0;
-	private float _alphaRatio = 0;
+	private float _alphaRatio = 1;
 	public float alphaRatio{
 		get{
 			return _alphaRatio;
 		}
 		set{
-			_prevAlphaRatio = _alphaRatio;
 			_alphaRatio = value;
+
+			_SetAlpha();
 		}
 	}
 
 	private float _prevAlpha = 0;
-	private float _alpha = 0;
+	private float _alpha = 0.04f;
 	public float alpha{
 		get{
 			return _alpha;
@@ -40,17 +40,28 @@ public class MarkerMediator : MonoBehaviour{
 		set{
 			_prevAlpha = _alpha;
 			_alpha = value;
+
+			_SetAlpha();
 		}
 	}
 
-	private float _prevColormapRatio = 0;
+	private void _SetAlpha(){
+		// update alpha mix
+		if (_alpha != _prevAlpha && _alphaRatio != 0 && _alphaRatio != 1) {
+			PrismMaterial.SetFloat ("_Alpha", Mathf.Lerp (_prevAlpha, _alpha, _alphaRatio));
+		} else if (_alphaRatio == 0) {
+			PrismMaterial.SetFloat ("_Alpha", _prevAlpha);
+		} else if (_alphaRatio == 1) {
+			PrismMaterial.SetFloat ("_Alpha", _alpha);
+		}
+	}
+	
 	private float _colormapRatio = 0;
 	public float colormapRatio{
 		get{
 			return _colormapRatio;
 		}
 		set{
-			_prevColormapRatio = _colormapRatio;
 			_colormapRatio = value;
 		}
 	}
@@ -67,14 +78,12 @@ public class MarkerMediator : MonoBehaviour{
 		}
 	}
 
-	private float _prevColormapPositionRatio = 0;
 	private float _colormapPositionRatio = 0;
 	public float colormapPositionRatio{
 		get{
 			return _colormapPositionRatio;
 		}
 		set{
-			_prevColormapPositionRatio = _colormapPositionRatio;
 			_colormapPositionRatio = value;
 		}
 	}
@@ -83,14 +92,12 @@ public class MarkerMediator : MonoBehaviour{
 	// ----------------------------------------
 	// Position Transitions
 
-	private float _prevPositionRatio = 0;
 	private float _positionRatio = 0;
 	public float positionRatio{
 		get{
 			return _positionRatio;
 		}
 		set{
-			_prevPositionRatio = _positionRatio;
 			_positionRatio = value;
 		}
 	}
@@ -113,14 +120,12 @@ public class MarkerMediator : MonoBehaviour{
 	// Rotation Transitions
 
 	
-	private float _prevRotationRatio = 0;
 	private float _rotationRatio = 0;
 	public float rotationRatio{
 		get{
 			return _rotationRatio;
 		}
 		set{
-			_prevRotationRatio = _rotationRatio;
 			_rotationRatio = value;
 		}
 	}
@@ -154,14 +159,7 @@ public class MarkerMediator : MonoBehaviour{
 		// update rotation
 		// update colormap position
 		// update colormap mix
-		// update alpha mix
-		if (_alpha != _prevAlpha && _alphaRatio != 0 && _alphaRatio != 1) {
-			PrismMaterial.SetFloat ("_alpha", Mathf.Lerp (_prevAlpha, _alpha, _alphaRatio));
-		} else if (_alphaRatio == 0) {
-			PrismMaterial.SetFloat ("_alpha", _prevAlpha);
-		} else if (_alphaRatio == 1) {
-			PrismMaterial.SetFloat ("_alpha", _alpha);
-		}
+
 
 		Vector3 newScale = new Vector3 ();
 		newScale.x = DisplayvalueAffectsScaleX ? gameObject.transform.localScale.x * friction : 1;
