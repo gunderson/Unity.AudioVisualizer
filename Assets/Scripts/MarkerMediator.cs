@@ -32,7 +32,7 @@ public class MarkerMediator : MonoBehaviour{
 	}
 
 	private float _prevAlpha = 0;
-	private float _alpha = 0.04f;
+	private float _alpha = 0.07f;
 	public float alpha{
 		get{
 			return _alpha;
@@ -48,11 +48,11 @@ public class MarkerMediator : MonoBehaviour{
 	private void _SetAlpha(){
 		// update alpha mix
 		if (_alpha != _prevAlpha && _alphaRatio != 0 && _alphaRatio != 1) {
-			PrismMaterial.SetFloat ("_Alpha", Mathf.Lerp (_prevAlpha, _alpha, _alphaRatio));
+			PrismMaterial.SetFloat ("_Alpha0", Mathf.Lerp (_prevAlpha, _alpha, _alphaRatio));
 		} else if (_alphaRatio == 0) {
-			PrismMaterial.SetFloat ("_Alpha", _prevAlpha);
+			PrismMaterial.SetFloat ("_Alpha0", _prevAlpha);
 		} else if (_alphaRatio == 1) {
-			PrismMaterial.SetFloat ("_Alpha", _alpha);
+			PrismMaterial.SetFloat ("_Alpha0", _alpha);
 		}
 	}
 	
@@ -62,7 +62,10 @@ public class MarkerMediator : MonoBehaviour{
 			return _colormapRatio;
 		}
 		set{
-			_colormapRatio = value;
+			if (value != _colormapRatio){
+				_colormapRatio = value;
+				PrismMaterial.SetFloat ("_ColorMapBlend", value);
+			}
 		}
 	}
 
@@ -75,6 +78,9 @@ public class MarkerMediator : MonoBehaviour{
 		set{
 			_prevColormapPosition = _colormapPosition;
 			_colormapPosition = value;
+
+			PrismMaterial.SetVector("_Position", new Vector4(value.x, value.y));
+			
 		}
 	}
 
@@ -126,20 +132,31 @@ public class MarkerMediator : MonoBehaviour{
 			return _rotationRatio;
 		}
 		set{
-			_rotationRatio = value;
+			if (_rotationRatio != value){
+				_rotationRatio = value;
+				_UpdateRotation();
+			}
 		}
 	}
 
-	private Vector3 _rotationStart = new Vector3();
-	private Vector3 _rotationDest = new Vector3();
-	public Vector3 rotationDest{
+	private float _rotationStart = 0;
+	private float _rotationDest = 0;
+	public float rotationDest{
 		get{
 			return _rotationDest;
 		}
 		set{
 			_rotationStart = _rotationDest;
 			_rotationDest = value;
+			if (_rotationDest != _rotationStart){
+				_UpdateRotation();
+			}
 		}
+	}
+
+	private void _UpdateRotation(){
+		Quaternion myQuat = Quaternion.AngleAxis(Mathf.Lerp(_rotationStart, _rotationDest, _rotationRatio),Vector3.up);
+		
 	}
 	
 	// End Rotation Transitions
@@ -148,9 +165,9 @@ public class MarkerMediator : MonoBehaviour{
 
 	
 	// Use this for initialization
-	void Start (){
+	void Awake (){
 		Prism = gameObject.transform.Find("Prism").gameObject;
-		PrismMaterial = Prism.GetComponent<Renderer> ().material;
+		PrismMaterial = Prism.gameObject.GetComponent<Renderer> ().material;
 	}
 	
 	// Update is called once per frame
