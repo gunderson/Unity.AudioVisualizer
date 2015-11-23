@@ -20,11 +20,13 @@ public class GridMediator : MonoBehaviour{
 	public float positionRatio = 0;
 	public float colormapRatio = 0;
 
+	public float BeatScale = 1 << 14;
+
 	private float _transitionStartTime = 0;
 	public float transitionDuration = 0;
 
 	private float _prevAlpha = 0;
-	public float Alpha = 0.04f;
+	public float Alpha = 0f;
 
 
 	public Vector3 markerLookTarget = new Vector3();
@@ -104,9 +106,10 @@ public class GridMediator : MonoBehaviour{
 			m.colormapRatio = colormapRatio;
 			if (_prevAlpha != Alpha){
 				m.alpha = Alpha;
-				_prevAlpha = Alpha;
 			}
 		}
+		
+		_prevAlpha = Alpha;
 	}
 	
 	public void MoveMarkersToSpiral(){
@@ -134,8 +137,7 @@ public class GridMediator : MonoBehaviour{
 	public void UpdateSpiral(float[][] FFTBuffer){
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
 			MarkerMediator m = ActiveMarkers[i];
-			float scale = 1 << 13;//16 + 1024 * m.GridPosition.z / GridSize.z;
-			m.displayValue = audioMediator.FFTBuffer[0][(numMarkers - 1) - i] * scale;
+			m.displayValue = audioMediator.FFTBuffer[0][(numMarkers - 1) - i] * BeatScale;
 		}
 	}
 
@@ -192,11 +194,7 @@ public class GridMediator : MonoBehaviour{
 			
 			Vector2 PositionRatio = new Vector2(m.gameObject.transform.position.x / finalRadius, m.gameObject.transform.position.z / finalRadius);
 			
-			Transform prism = m.gameObject.transform.Find("Prism");
-			
-			Renderer r = prism.GetComponent<Renderer>();
-			Material mat = r.material;
-			mat.SetVector("_Position", new Vector4(PositionRatio.x, PositionRatio.y));
+			m.colormapPosition = new Vector2(PositionRatio.x, PositionRatio.y);
 		}
 
 		return Markers;
