@@ -24,7 +24,7 @@ public class GridMediator : MonoBehaviour{
 	public float transitionDuration = 0;
 
 	private float _prevAlpha = 0;
-	public float Alpha = 0;
+	public float Alpha = 0.04f;
 
 
 	public Vector3 markerLookTarget = new Vector3();
