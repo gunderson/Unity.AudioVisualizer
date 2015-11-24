@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GridMediator : MonoBehaviour{
 	private List<MarkerMediator> ActiveMarkers = new List<MarkerMediator> ();
 	public GameObject MarkerPrefab;
-	private AudioMediator audioMediator;
+	public AudioMediator AudioMediator;
 	private float GoldenAngle = 2.399963229728653f;
 
 
@@ -66,7 +66,14 @@ public class GridMediator : MonoBehaviour{
 		}
 	}
 
-
+	public Vector3 PrismRotation{
+		set {
+			Quaternion q = Quaternion.Euler(value);
+			foreach (MarkerMediator m in ActiveMarkers){
+				m.Prism.transform.localRotation = q;
+			}
+		}
+	}
 
 	void Awake() {
 		MarkerPrefab = Resources.Load ("Marker") as GameObject;
@@ -74,7 +81,7 @@ public class GridMediator : MonoBehaviour{
 
 	// Use this for initialization
 	void Start (){
-		audioMediator = GameObject.Find ("AudioController").GetComponent<AudioMediator> ();
+		AudioMediator = GameObject.Find ("AudioController").GetComponent<AudioMediator> ();
 		PopulateMarkers ();
 		setupSpiral (ActiveMarkers);
 	}
@@ -83,19 +90,19 @@ public class GridMediator : MonoBehaviour{
 	void Update (){
 		switch(_mode){
 		case LayoutPattern.Spiral:
-			UpdateSpiral(audioMediator.FFTBuffer);
+			UpdateSpiral(AudioMediator.FFTBuffer);
 			break;
 			
 		case LayoutPattern.Cone:
-			UpdateGrid(audioMediator.FFTBuffer);
+			UpdateGrid(AudioMediator.FFTBuffer);
 			break;
 			
 		case LayoutPattern.Grid:
-			UpdateCone(audioMediator.FFTBuffer);
+			UpdateCone(AudioMediator.FFTBuffer);
 			break;
 			
 		case LayoutPattern.Sphere:
-			UpdateSphere(audioMediator.FFTBuffer);
+			UpdateSphere(AudioMediator.FFTBuffer);
 			break;
 		}
 
@@ -136,7 +143,7 @@ public class GridMediator : MonoBehaviour{
 	public void UpdateSpiral(float[][] FFTBuffer){
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
 			MarkerMediator m = ActiveMarkers[i];
-			m.displayValue = audioMediator.FFTBuffer[0][(numMarkers - 1) - i] * BeatScale;
+			m.displayValue = AudioMediator.FFTBuffer[0][(numMarkers - 1) - i] * BeatScale;
 		}
 	}
 
@@ -152,22 +159,20 @@ public class GridMediator : MonoBehaviour{
 		
 	}
 
-	public List<MarkerMediator> changeColormap(List<MarkerMediator> Markers, Texture2D colormap){
-		for (int i = 0, endi = Markers.Count; i<endi; i++) {
-//			MarkerMediator m = Markers[i];
-			// set colormap1 to colormap0
-			// set colormap1 to colormap
-			// set colormapRatio = 0;
+	public void changeColormap(Texture2D Colormap){
+		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
+			MarkerMediator m = ActiveMarkers[i];
+			m.Colormap = Colormap;
 		}
-		return Markers;
+		return;
 	}
 
-	public List<MarkerMediator> setColormapRatio(List<MarkerMediator> Markers, float ratio){
-		for (int i = 0, endi = Markers.Count; i<endi; i++) {
+	public void setColormapRatio(float ratio){
+		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
 //			MarkerMediator m = Markers[i];
 			// set colormapRatio = ratio;
 		}
-		return Markers;
+		return;
 	}
 	
 	private List<MarkerMediator> setupSpiral(List<MarkerMediator> Markers){

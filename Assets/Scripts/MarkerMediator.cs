@@ -8,7 +8,7 @@ public class MarkerMediator : MonoBehaviour{
 
 	public Vector3 scaleDest;
 
-	private GameObject Prism;
+	public GameObject Prism;
 	private Material PrismMaterial;
 
 	public bool DisplayvalueAffectsScaleX = false;
@@ -93,6 +93,15 @@ public class MarkerMediator : MonoBehaviour{
 			_colormapPositionRatio = value;
 		}
 	}
+
+	public Texture2D Colormap {
+		set {
+			PrismMaterial.SetTexture("_ColorMap0", PrismMaterial.GetTexture("_ColorMap1"));
+			PrismMaterial.SetTexture("_ColorMap1", value);
+			colormapRatio = 0;
+		}
+	}
+
 
 	// End Color Transitions
 	// ----------------------------------------

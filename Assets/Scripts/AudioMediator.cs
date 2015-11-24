@@ -15,7 +15,6 @@ public class AudioMediator : MonoBehaviour {
 		// load audio file
 		FFTBuffer = AudioMediator.MakeFlatBuffer(FFTBufferDepth, FFTSampleDepth);
 		MainAudioSource = gameObject.GetComponent<AudioSource> ();
-		MainAudioSource.Play ();
 	}
 	
 	// Update is called once per frame

@@ -13,15 +13,19 @@ public class SceneController : MonoBehaviour {
 	public GameObject CameraHolder;
 
 	public struct CuePoint{
-		public float CueTime;
+		public float Delay;
 		public string Name;
 		public bool Triggered;
+		public float Duration;
+		public float CueTime;
 		
-		public CuePoint(float CueTime, string Name)
+		public CuePoint(string Name, float Delay, float Duration)
 		{
 			this.Triggered = false;
-			this.CueTime = CueTime;
+			this.Delay = Delay;
 			this.Name = Name;
+			this.Duration = Duration;
+			this.CueTime = 0;
 		}
 	}
 		
@@ -34,47 +38,126 @@ public class SceneController : MonoBehaviour {
 		StartTime = 0;
 		CuePoints = new List<CuePoint> ();
 		MGrid = Grid.GetComponent<GridMediator> ();
-		MAudio = Grid.GetComponent<AudioMediator> ();
+		MAudio = Audio.GetComponent<AudioMediator> ();
 		MCamera = GameObject.Find("CameraHolder").GetComponent<CameraMediator> ();
 
-		contstructCuePoints ();
+		MakeCuePoints ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		TriggerCuePoints ();
+		
+		if (Input.GetKey("escape")){
+			Application.Quit();
+
+		}
 	}
 
 	void TriggerCuePoints(){
 		float CurrentTime = Time.time - StartTime;
 		float PrevTime = CurrentTime - Time.deltaTime;
-
-		for (int i = 0; i < CuePoints.Count; i++) {
-			CuePoint c = CuePoints[i];
+		foreach (CuePoint c in CuePoints) {
 			if (c.CueTime > PrevTime && c.CueTime <= CurrentTime && c.Triggered == false){
-				Debug.Log ("TRIGGER");
 				TriggerCuePoint(c);
 				CuePoints.Remove(c);
-				continue;
+				break;
 			}
 		}
+		
 	}
 
 	void TriggerCuePoint(CuePoint c){
 		c.Triggered = true;
 		switch (c.Name) {
 		case "Start":
+			MAudio.MainAudioSource.Play ();
+			
 			break;
-		case "First Move":
-			Debug.Log (Time.time);
-			MCamera.TweenPosition (new Vector3 (0, 20, 0), 40);
-			MCamera.TweenRotation (new Vector3 (90, 0, 0), 40);
+		case "Move 0":
+			// sweep up to top
+			MCamera.TweenPosition (new Vector3 (0, 20, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (90, 0, 0), c.Duration);
+			break;
+
+		case "Move 1":
+			// outside upper angle
+			MCamera.TweenPosition (new Vector3 (0, 10, -45), c.Duration);
+			MCamera.TweenRotation (new Vector3 (20, 0, 0), c.Duration);
+			break;
+			
+		case "Move 2":
+			// back nome
+			MCamera.TweenPosition (new Vector3 (0, 0, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (0, 0, 0), c.Duration);
+			break;
+			
+		case "Move 3":
+			// down the cone
+			MCamera.TweenPosition (new Vector3 (0, 2, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (90, 0, 0), c.Duration);
+			break;
+
+		case "Move 4":
+			// pull out wide
+			MCamera.TweenPosition (new Vector3 (0, 90, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (90, 0, 0), c.Duration);
+			break;
+			
+		case "Move 5":
+			// pull out wider
+			MCamera.TweenPosition (new Vector3 (0, 85, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (90, 0, 0), c.Duration);
+			break;
+
+		case "Move 6":
+			// come down to the side
+			MCamera.TweenPosition (new Vector3 (0, 30, -40), c.Duration);
+			MCamera.TweenRotation (new Vector3 (90 - 36.86f, 0, 0), c.Duration);
+			break;
+
+		case "Move 7":
+			// rotate prisms
+//			MGrid.PrismRotation = new Vector3(0, 0, 45);
+			// move 1/8 around column
+			MCamera.TweenPosition (new Vector3 (-10, 30, -30), c.Duration);
+			MCamera.TweenRotation (new Vector3 (90 - 36.86f, 45, 0), c.Duration);
+			break;
+		case "Move 8":
+			// finish move
+			MCamera.TweenPosition (new Vector3 (-40, 30, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (90 - 36.86f, 90, 0), c.Duration);
+			break;
+
+		case "Move 9":
+			// back home
+			MCamera.TweenPosition (new Vector3 (0, 0, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (0, 0, 0), c.Duration);
 			break;
 		}
 	}
 
-	void contstructCuePoints(){
-		CuePoints.Add(new CuePoint(0, "Start"));
-		CuePoints.Add(new CuePoint(5, "First Move"));
+	void MakeCuePoints(){
+		setupCuePoint (new CuePoint("Start" , 0,  0 ));
+		setupCuePoint (new CuePoint("Move 0", 17, 40));
+		setupCuePoint (new CuePoint("Move 1", 14, 40)); 
+		setupCuePoint (new CuePoint("Move 2", 12, 20));
+		setupCuePoint (new CuePoint("Move 3", 12, 20)); // start time + (duration + delay) + (duration + delay)
+		setupCuePoint (new CuePoint("Move 4", 12, 80));
+		setupCuePoint (new CuePoint("Move 5", 3, 30));
+		setupCuePoint (new CuePoint("Move 6", 12, 30));
+		setupCuePoint (new CuePoint("Move 7", 3,  10));
+		setupCuePoint (new CuePoint("Move 8", 0,  10));
+		setupCuePoint (new CuePoint("Move 9", 12, 30));
+	}
+
+	private CuePoint setupCuePoint(CuePoint c){
+		if (CuePoints.Count > 0) {
+			c.CueTime = CuePoints [CuePoints.Count - 1].CueTime + CuePoints [CuePoints.Count - 1].Duration + c.Delay;
+		} else {
+			c.CueTime = c.Delay;
+		}
+		CuePoints.Add(c);
+		return c;
 	}
 }
