@@ -69,14 +69,14 @@ public class MarkerMediator : MonoBehaviour{
 		}
 	}
 
-	private Vector2 _prevColormapPosition = new Vector2();
+//	private Vector2 _prevColormapPosition = new Vector2();
 	private Vector2 _colormapPosition = new Vector2();
 	public Vector2 colormapPosition{
 		get{
 			return _colormapPosition;
 		}
 		set{
-			_prevColormapPosition = _colormapPosition;
+//			_prevColormapPosition = _colormapPosition;
 			_colormapPosition = value;
 
 			PrismMaterial.SetVector("_Position", new Vector4(value.x, value.y));
@@ -108,7 +108,7 @@ public class MarkerMediator : MonoBehaviour{
 		}
 	}
 	
-	private Vector3 _positionStart = new Vector3();
+//	private Vector3 _positionStart = new Vector3();
 	private Vector3 _positionDest = new Vector3();
 	public Vector3 positionDest{
 		get{
@@ -116,7 +116,7 @@ public class MarkerMediator : MonoBehaviour{
 		}
 		set{
 			
-			_positionStart = _positionDest;
+//			_positionStart = _positionDest;
 			_positionDest = value;
 		}
 	}
@@ -155,7 +155,7 @@ public class MarkerMediator : MonoBehaviour{
 	}
 
 	private void _UpdateRotation(){
-		Quaternion myQuat = Quaternion.AngleAxis(Mathf.Lerp(_rotationStart, _rotationDest, _rotationRatio),Vector3.up);
+//		Quaternion myQuat = Quaternion.AngleAxis(Mathf.Lerp(_rotationStart, _rotationDest, _rotationRatio),Vector3.up);
 		
 	}
 	
