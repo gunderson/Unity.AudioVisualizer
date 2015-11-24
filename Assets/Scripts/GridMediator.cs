@@ -6,7 +6,7 @@ public class GridMediator : MonoBehaviour{
 	private List<MarkerMediator> ActiveMarkers = new List<MarkerMediator> ();
 	public GameObject MarkerPrefab;
 	private AudioMediator audioMediator;
-	private float GoldenAngle = 135.508f;
+	private float GoldenAngle = 2.399963229728653f;
 
 
 	public int numMarkers = 2048;
@@ -22,7 +22,6 @@ public class GridMediator : MonoBehaviour{
 
 	public float BeatScale = 1 << 14;
 
-	private float _transitionStartTime = 0;
 	public float transitionDuration = 0;
 
 	private float _prevAlpha = 0;
@@ -114,14 +113,14 @@ public class GridMediator : MonoBehaviour{
 	
 	public void MoveMarkersToSpiral(){
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
-			MarkerMediator m = ActiveMarkers[i];
+//			MarkerMediator m = ActiveMarkers[i];
 
 		}
 	}
 
 	public void MoveMarkersToCone(){
 		for (int i = 0, endi = ActiveMarkers.Count; i<endi; i++) {
-			MarkerMediator m = ActiveMarkers[i];
+//			MarkerMediator m = ActiveMarkers[i];
 		}
 	}
 
@@ -155,7 +154,7 @@ public class GridMediator : MonoBehaviour{
 
 	public List<MarkerMediator> changeColormap(List<MarkerMediator> Markers, Texture2D colormap){
 		for (int i = 0, endi = Markers.Count; i<endi; i++) {
-			MarkerMediator m = Markers[i];
+//			MarkerMediator m = Markers[i];
 			// set colormap1 to colormap0
 			// set colormap1 to colormap
 			// set colormapRatio = 0;
@@ -165,7 +164,7 @@ public class GridMediator : MonoBehaviour{
 
 	public List<MarkerMediator> setColormapRatio(List<MarkerMediator> Markers, float ratio){
 		for (int i = 0, endi = Markers.Count; i<endi; i++) {
-			MarkerMediator m = Markers[i];
+//			MarkerMediator m = Markers[i];
 			// set colormapRatio = ratio;
 		}
 		return Markers;
@@ -180,7 +179,7 @@ public class GridMediator : MonoBehaviour{
 		for (int i = 0; i < Markers.Count; i++){
 			MarkerMediator m = Markers[i];
 			
-			float angle = (float)(i * 2.399963229728653); //Golden angle relative to TWO_PI
+			float angle = (float)(i * GoldenAngle); //Golden angle relative to TWO_PI
 			
 			Vector3 pos = new Vector3(Mathf.Cos(angle) * Mathf.Sqrt(i + spiralStartIndex),0,Mathf.Sin(angle) * Mathf.Sqrt(i + spiralStartIndex));
 			
