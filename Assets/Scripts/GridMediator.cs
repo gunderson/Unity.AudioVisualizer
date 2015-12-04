@@ -2,16 +2,16 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GridMediator : MonoBehaviour{
+public class GridMediator : MotionTween{
 	private List<MarkerMediator> ActiveMarkers = new List<MarkerMediator> ();
 	public GameObject MarkerPrefab;
 	public AudioMediator AudioMediator;
 	private float GoldenAngle = 2.399963229728653f;
 
 
-	public int numMarkers = 2048;
+	public int numMarkers = 1024;
 	public int numLayers = 1;
-	public float spiralScale = 1.0f;
+	public float spiralScale = 2.0f;
 	public int spiralStartIndex = 30;
 	public float spiralRadius = 64f;
 
@@ -20,7 +20,7 @@ public class GridMediator : MonoBehaviour{
 	public float positionRatio = 0;
 	public float colormapRatio = 0;
 
-	public float BeatScale = 1 << 14;
+//	public float BeatScale = 1 << 11;
 
 	public float transitionDuration = 0;
 
@@ -81,6 +81,7 @@ public class GridMediator : MonoBehaviour{
 
 	// Use this for initialization
 	void Start (){
+		base.Start ();
 		AudioMediator = GameObject.Find ("AudioController").GetComponent<AudioMediator> ();
 		PopulateMarkers ();
 		setupSpiral (ActiveMarkers);
@@ -88,6 +89,7 @@ public class GridMediator : MonoBehaviour{
 	
 	// Update is called once per frame
 	void Update (){
+		base.Update();
 		switch(_mode){
 		case LayoutPattern.Spiral:
 			UpdateSpiral(AudioMediator.FFTBuffer);
