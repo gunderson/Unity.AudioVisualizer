@@ -41,7 +41,7 @@
         // setup a analyzer
         analyser = context.createAnalyser();
         analyser.smoothingTimeConstant = 1/60;
-        analyser.fftSize = 1024;
+        analyser.fftSize = 2048;
 
         // create a buffer source node
         sourceNode = context.createBufferSource();
@@ -90,23 +90,36 @@
     javascriptNode.onaudioprocess = function() {
 
         // get the average for the first channel
-        var array =  new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(array);
+        var array8 =  new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(array8);
+        var array = array8.join(",").split(",").map(function(a){return parseInt(a);});
+        if (!startTime) return;
         timestamps.push(Date.now() - startTime);
         data.push(array);
 
     };
 
     function onComplete(){
-    	var a = document.createElement("a");
-        a.innerHTML = "Get Data";
-    	document.body.appendChild(a);
-    	a.download = true;
-        var indexed = [];
-        data.forEach(function(e, i){
-            indexed[timestamps[i]] = data[i];
+    	// var a = document.createElement("a");
+        // a.innerHTML = "Get Data";
+    	// document.body.appendChild(a);
+    	// a.download = "fftdata.json";
+        var indexed = {};
+        data = data.map(function(e, i){
+            return {
+                time: timestamps[i],
+                data: data[i]
+            };
         });
-        console.log(JSON.stringify(data));
-    	// a.href = "data:application/json;base64," + btoa(indexed);
+        console.log(JSON.stringify(data, null, "\t"));
+
+        // console.log(JSON.stringify(indexed));
+    	// a.href = "data:application/json;," + JSON.stringify(indexed);
+
+        var pre = document.createElement("pre");
+        pre.innerHTML = JSON.stringify(data, null, "\t");
+
+        document.body.appendChild(pre);
+
     }
 
