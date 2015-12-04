@@ -8,6 +8,7 @@
 
 // download object
 
+    var timestamps = [];
 	var data = [];
 
     // create the audio context (chrome only for now)
@@ -26,7 +27,7 @@
 
     // load the sound
     setupAudioNodes();
-    loadSound("wagner-short.ogg");
+    loadSound("chaos.wav");
 
 
     function setupAudioNodes() {
@@ -45,13 +46,13 @@
         // create a buffer source node
         sourceNode = context.createBufferSource();
         sourceNode.connect(analyser);
-        analyser.connect(javascriptNode);
 
         sourceNode.connect(context.destination);
     }
 
     // load the specified sound
     function loadSound(url) {
+        console.log(url);
         var request = new XMLHttpRequest();
         request.open('GET', url, true);
         request.responseType = 'arraybuffer';
@@ -62,17 +63,20 @@
             // decode the data
             context.decodeAudioData(request.response, function(buffer) {
                 // when the audio is decoded play the sound
+                analyser.connect(javascriptNode);
                 playSound(buffer);
             }, onError);
-        }
+        };
         request.send();
     }
 
+    var startTime;
 
     function playSound(buffer) {
         sourceNode.buffer = buffer;
         sourceNode.start(0);
-        sourceNode.oncomplete = onComplete;
+        sourceNode.onended = onComplete;
+        startTime = Date.now();
     }
 
     // log if an error occurs
@@ -88,15 +92,21 @@
         // get the average for the first channel
         var array =  new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(array);
-
+        timestamps.push(Date.now() - startTime);
         data.push(array);
 
-    }
+    };
 
     function onComplete(){
     	var a = document.createElement("a");
-    	document.body.append(a);
+        a.innerHTML = "Get Data";
+    	document.body.appendChild(a);
     	a.download = true;
-    	a.href = "data:application/json;base64," + atob(data)
+        var indexed = [];
+        data.forEach(function(e, i){
+            indexed[timestamps[i]] = data[i];
+        });
+        console.log(JSON.stringify(data));
+    	// a.href = "data:application/json;base64," + btoa(indexed);
     }
 
