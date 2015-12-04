@@ -76,20 +76,22 @@ public class SceneController : MonoBehaviour {
 			break;
 		case "Move 0":
 			// sweep up to top
-			MCamera.TweenPosition (new Vector3 (0, 20, 0), c.Duration);
-			MCamera.TweenRotation (new Vector3 (90, 0, 0), c.Duration);
+			MCamera.TweenPosition (new Vector3 (0, 4, -32), c.Duration);
+			MCamera.TweenRotation (new Vector3 (5, 0, 0), c.Duration);
 			break;
 
 		case "Move 1":
 			// outside upper angle
 			MCamera.TweenPosition (new Vector3 (0, 10, -45), c.Duration);
-			MCamera.TweenRotation (new Vector3 (20, 0, 0), c.Duration);
+			MCamera.TweenRotation (new Vector3 (5, 0, 0), c.Duration);
+			MGrid.TweenBeatScale(new Vector3 (1 << 11,0,0), c.Duration);
 			break;
 			
 		case "Move 2":
 			// back nome
 			MCamera.TweenPosition (new Vector3 (0, 0, 0), c.Duration);
 			MCamera.TweenRotation (new Vector3 (0, 0, 0), c.Duration);
+			MGrid.TweenBeatScale(new Vector3 (1 << 14,0,0), c.Duration);
 			break;
 			
 		case "Move 3":
@@ -100,7 +102,7 @@ public class SceneController : MonoBehaviour {
 
 		case "Move 4":
 			// pull out wide
-			MCamera.TweenPosition (new Vector3 (0, 90, 0), c.Duration);
+			MCamera.TweenPosition (new Vector3 (0, 200, 0), c.Duration);
 			MCamera.TweenRotation (new Vector3 (90, 0, 0), c.Duration);
 			break;
 			
@@ -139,11 +141,11 @@ public class SceneController : MonoBehaviour {
 
 	void MakeCuePoints(){
 		setupCuePoint (new CuePoint("Start" , 0,  0 ));
-		setupCuePoint (new CuePoint("Move 0", 17, 40));
-		setupCuePoint (new CuePoint("Move 1", 14, 40)); 
-		setupCuePoint (new CuePoint("Move 2", 12, 20));
-		setupCuePoint (new CuePoint("Move 3", 12, 20)); // start time + (duration + delay) + (duration + delay)
-		setupCuePoint (new CuePoint("Move 4", 12, 80));
+		setupCuePoint (new CuePoint("Move 0", 17, 50)); 
+		setupCuePoint (new CuePoint("Move 1", 0, 44)); 
+		setupCuePoint (new CuePoint("Move 2", 12, 32));
+		setupCuePoint (new CuePoint("Move 3", 0, 20)); // start time + (duration + delay) + (duration + delay)
+		setupCuePoint (new CuePoint("Move 4", 12, 70));
 		setupCuePoint (new CuePoint("Move 5", 3, 30));
 		setupCuePoint (new CuePoint("Move 6", 12, 30));
 		setupCuePoint (new CuePoint("Move 7", 3,  10));
