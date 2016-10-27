@@ -141,7 +141,7 @@ public class SceneController : MonoBehaviour {
 
 	void MakeCuePoints(){
 		setupCuePoint (new CuePoint("Start" , 0,  0 ));
-		setupCuePoint (new CuePoint("Move 0", 17, 50)); 
+		setupCuePoint (new CuePoint("Move 0", 27, 40)); 
 		setupCuePoint (new CuePoint("Move 1", 0, 44)); 
 		setupCuePoint (new CuePoint("Move 2", 12, 32));
 		setupCuePoint (new CuePoint("Move 3", 0, 20)); // start time + (duration + delay) + (duration + delay)
